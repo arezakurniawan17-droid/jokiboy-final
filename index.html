@@ -110,8 +110,42 @@
   .nav-menu a{font-weight:500; font-size:14.5px; color:var(--ink-2); transition:color .15s;}
   .nav-menu a:hover{color:var(--blue);}
   .nav-right{display:flex; gap:10px; align-items:center;}
-  .hamburger{display:none; width:40px; height:40px; align-items:center; justify-content:center; flex-direction:column; gap:5px;}
-  .hamburger span{width:22px; height:2px; background:var(--ink); border-radius:2px; transition:.2s;}
+  .hamburger{display:none; width:40px; height:40px; align-items:center; justify-content:center; flex-direction:column; gap:5px; border-radius:8px; transition:background .15s;}
+  .hamburger:hover{background:rgba(0,0,0,.06);}
+  .hamburger span{width:22px; height:2px; background:var(--ink); border-radius:2px; transition:transform .25s, opacity .2s;}
+  .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamburger.open span:nth-child(2){opacity:0;}
+  .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* Mobile dropdown */
+  .nav-dropdown{
+    display:none;
+    position:fixed; top:calc(var(--bar-h) + var(--nav-h)); left:0; right:0; z-index:89;
+    background:rgba(247,247,245,.97);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line);
+    padding:16px 24px 24px;
+    flex-direction:column; gap:4px;
+    box-shadow:0 8px 32px rgba(0,0,0,.08);
+  }
+  .nav-dropdown.open{display:flex;}
+  .nav-dropdown a{
+    font-size:16px; font-weight:600; color:var(--ink-2);
+    padding:12px 8px; border-bottom:1px solid var(--line);
+    transition:color .15s;
+  }
+  .nav-dropdown a:last-of-type{border-bottom:none;}
+  .nav-dropdown a:hover{color:var(--blue);}
+  .nav-dropdown .dd-cta{
+    margin-top:12px;
+    display:flex; gap:10px;
+  }
+  .nav-dropdown .dd-cta a{
+    flex:1; text-align:center; border:none; padding:13px;
+    border-radius:var(--r-pill); font-size:14px; font-weight:700;
+  }
+  .nav-dropdown .dd-cta .d-wa{background:var(--blue); color:#fff; box-shadow:0 6px 18px rgba(4,46,255,.28);}
+  .nav-dropdown .dd-cta .d-login{background:#fff; color:var(--ink); border:1.5px solid var(--line);}
 
   /* ==================== HERO ==================== */
   .hero{
@@ -691,12 +725,21 @@
     <div class="nav-right">
       <a class="btn btn-primary btn-sm" href="https://wa.me/6282178880633?text=Halo%20JokiBoy%2C%20mau%20konsultasi%20skripsi%20dong!" target="_blank" rel="noopener">💬 Konsultasi Gratis</a>
       <a class="btn btn-outline btn-sm" href="login.html">🔐 Masuk</a>
-      <button class="hamburger" aria-label="Menu" onclick="document.querySelector('.nav-menu').style.display=document.querySelector('.nav-menu').style.display==='flex'?'none':'flex'">
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 </nav>
+<div class="nav-dropdown" id="navDropdown">
+  <a href="#kenapa" class="dd-link">Kenapa JokiBoy</a>
+  <a href="#layanan" class="dd-link">Layanan</a>
+  <a href="#testimoni" class="dd-link">Cerita Alumni</a>
+  <div class="dd-cta">
+    <a class="d-wa" href="https://wa.me/6282178880633?text=Halo%20JokiBoy%2C%20mau%20konsultasi%20skripsi%20dong!" target="_blank" rel="noopener">💬 Konsultasi Gratis</a>
+    <a class="d-login" href="login.html">🔐 Masuk</a>
+  </div>
+</div>
 
 <!-- ==================== HERO ==================== -->
 <section class="hero">
@@ -1121,6 +1164,22 @@
     document.getElementById('cdM').textContent = pad(m);
     document.getElementById('cdS').textContent = pad(s);
   }
+
+  // ==================== HAMBURGER DROPDOWN ====================
+  const hamburger = document.getElementById('hamburger');
+  const navDropdown = document.getElementById('navDropdown');
+  hamburger.addEventListener('click', () => {
+    const isOpen = hamburger.classList.toggle('open');
+    navDropdown.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+  document.querySelectorAll('.dd-link').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navDropdown.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+    });
+  });
 
   // ==================== FAQ TOGGLE ====================
   function tf(btn){
