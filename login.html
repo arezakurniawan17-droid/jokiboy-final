@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Masuk — JokiBoy</title>
+<meta name="description" content="Login klien JokiBoy. Lihat progress skripsimu real-time." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --blue: #042EFF;
+    --blue-dark: #01155e;
+    --blue-light: #eaedff;
+    --yellow: #fde68a;
+    --bg: #f7f7f5;
+    --ink: #111111;
+    --ink-2: #3a3a3a;
+    --mute: #6b6b73;
+    --line: #e7e7e2;
+    --error: #dc2626;
+    --error-bg: #fef2f2;
+    --success: #16a34a;
+    --r-pill: 100px;
+    --r-card: 18px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column;
+    line-height:1.5;
+  }
+
+  /* Top back link */
+  .topbar{
+    padding:22px 32px;
+  }
+  .back{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:14px; font-weight:500; color:var(--ink-2);
+    transition:color .15s;
+  }
+  .back:hover{color:var(--blue);}
+
+  /* Layout */
+  .wrap{
+    flex:1;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    max-width:1240px;
+    width:100%;
+    margin:0 auto;
+    padding:24px 32px 48px;
+    gap:64px;
+    align-items:center;
+  }
+
+  /* Left form */
+  .form-side{max-width:440px; width:100%; margin:0 auto;}
+  .logo{
+    font-size:34px; font-weight:800; letter-spacing:-1px;
+    margin-bottom:10px;
+  }
+  .logo b{color:var(--blue);}
+  .sub{
+    font-size:16px; color:var(--mute); margin-bottom:36px;
+  }
+
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block; font-size:13.5px; font-weight:600;
+    color:var(--ink-2); margin-bottom:8px;
+  }
+  .field input{
+    width:100%;
+    padding:14px 16px;
+    border:1.5px solid var(--line);
+    border-radius:12px;
+    font-family:inherit; font-size:15px;
+    background:#fff;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--blue);
+    box-shadow:0 0 0 4px rgba(4,46,255,.12);
+  }
+  .field-row{
+    display:flex; justify-content:space-between; align-items:center;
+    margin:-6px 0 24px;
+  }
+  .field-row a{
+    font-size:13px; color:var(--blue); font-weight:600;
+  }
+  .field-row a:hover{text-decoration:underline;}
+  .remember{
+    display:flex; align-items:center; gap:8px;
+    font-size:13.5px; color:var(--ink-2); cursor:pointer;
+  }
+  .remember input{accent-color:var(--blue); width:16px; height:16px;}
+
+  .btn-submit{
+    width:100%;
+    background:var(--blue); color:#fff;
+    padding:15px;
+    border:none; border-radius:var(--r-pill);
+    font-family:inherit; font-size:15px; font-weight:700;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(4,46,255,.28);
+    transition:transform .15s, box-shadow .15s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-submit:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 12px 32px rgba(4,46,255,.4);}
+  .btn-submit:disabled{opacity:.6; cursor:not-allowed;}
+  .spinner{
+    width:16px; height:16px;
+    border:2.5px solid rgba(255,255,255,.3);
+    border-top-color:#fff;
+    border-radius:50%;
+    animation:spin .6s linear infinite;
+    display:none;
+  }
+  .btn-submit.loading .spinner{display:inline-block;}
+  .btn-submit.loading .btn-label{display:none;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .msg{
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:13.5px;
+    margin-bottom:16px;
+    display:none;
+    align-items:center; gap:8px;
+  }
+  .msg.error{background:var(--error-bg); color:var(--error);}
+  .msg.success{background:#f0fdf4; color:var(--success);}
+
+  .divider{
+    text-align:center; margin:24px 0;
+    font-size:12.5px; color:var(--mute);
+    position:relative;
+  }
+  .divider::before, .divider::after{
+    content:""; position:absolute; top:50%;
+    width:calc(50% - 60px); height:1px; background:var(--line);
+  }
+  .divider::before{left:0;}
+  .divider::after{right:0;}
+
+  .help-note{
+    background:var(--blue-light);
+    border-radius:12px;
+    padding:16px;
+    font-size:13.5px; color:var(--ink-2);
+    line-height:1.55;
+    text-align:center;
+  }
+  .help-note a{color:var(--blue); font-weight:700;}
+  .help-note a:hover{text-decoration:underline;}
+
+  /* Right panel */
+  .info-side{
+    background:linear-gradient(155deg, #01155e 0%, #042EFF 100%);
+    color:#fff;
+    border-radius:28px;
+    padding:48px;
+    position:relative; overflow:hidden;
+    align-self:stretch;
+    display:flex; flex-direction:column; justify-content:center;
+    min-height:520px;
+  }
+  .info-side::before{
+    content:""; position:absolute; top:-100px; right:-100px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(253,230,138,.2), transparent 70%);
+  }
+  .info-side::after{
+    content:""; position:absolute; bottom:-120px; left:-80px;
+    width:280px; height:280px; border-radius:50%;
+    background:radial-gradient(circle, rgba(4,46,255,.5), transparent 70%);
+  }
+  .info-label{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,.12);
+    padding:6px 14px; border-radius:var(--r-pill);
+    font-size:12px; font-weight:600;
+    width:fit-content;
+    position:relative; z-index:1;
+  }
+  .info-side h2{
+    font-size:32px; font-weight:800; letter-spacing:-1px;
+    line-height:1.18; margin:18px 0 18px;
+    position:relative; z-index:1;
+    text-wrap:balance;
+  }
+  .info-side p{
+    font-size:15.5px; color:rgba(255,255,255,.82);
+    line-height:1.6; margin-bottom:32px;
+    position:relative; z-index:1;
+  }
+  .check-list{
+    list-style:none; position:relative; z-index:1;
+  }
+  .check-list li{
+    display:flex; align-items:flex-start; gap:12px;
+    font-size:15px; color:rgba(255,255,255,.92);
+    padding:10px 0;
+  }
+  .check-list li .ck{
+    flex-shrink:0;
+    width:24px; height:24px; border-radius:50%;
+    background:var(--yellow); color:var(--blue-dark);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:13px;
+  }
+
+  /* Footer */
+  .ftr{
+    padding:24px 32px;
+    text-align:center;
+    font-size:13px; color:var(--mute);
+  }
+
+  /* Responsive */
+  @media (max-width:900px){
+    .wrap{grid-template-columns:1fr; gap:32px; padding:16px 24px 32px;}
+    .info-side{order:-1; padding:32px; min-height:auto;}
+    .info-side h2{font-size:24px;}
+    .form-side{max-width:480px;}
+  }
+  @media (max-width:480px){
+    .topbar{padding:16px 20px;}
+    .wrap{padding:12px 20px 24px; gap:24px;}
+    .logo{font-size:28px;}
+    .sub{font-size:14.5px;}
+    .info-side{padding:28px 24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="index.html">← Kembali ke halaman utama</a>
+</div>
+
+<div class="wrap">
+  <!-- ============ FORM ============ -->
+  <div class="form-side">
+    <div class="logo">Joki<b>Boy</b></div>
+    <p class="sub">Masuk untuk lihat progress skripsimu</p>
+
+    <div class="msg error" id="msgError">⚠️ <span id="msgErrorText">Email atau password salah.</span></div>
+    <div class="msg success" id="msgSuccess">✅ <span>Login berhasil! Mengarahkan ke dashboard…</span></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="kamu@email.com" autocomplete="email" required />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Masukkan password" autocomplete="current-password" required />
+      </div>
+      <div class="field-row">
+        <label class="remember">
+          <input type="checkbox" id="remember" />
+          Ingat saya
+        </label>
+        <a href="#" onclick="event.preventDefault(); alert('Hubungi admin via WhatsApp untuk reset password.');">Lupa password?</a>
+      </div>
+      <button class="btn-submit" id="submitBtn" type="submit">
+        <span class="spinner"></span>
+        <span class="btn-label">Masuk</span>
+      </button>
+    </form>
+
+    <div class="divider">atau</div>
+
+    <div class="help-note">
+      Belum punya akun? Hubungi admin dulu via
+      <a href="https://wa.me/6282178880633?text=Halo%20JokiBoy%2C%20saya%20butuh%20akses%20dashboard%20klien." target="_blank" rel="noopener">WhatsApp 💬</a>
+    </div>
+  </div>
+
+  <!-- ============ INFO PANEL ============ -->
+  <div class="info-side">
+    <span class="info-label">🔒 Area Klien Aktif</span>
+    <h2>Pantau progress skripsimu real-time, kapan aja.</h2>
+    <p>Dashboard klien menampilkan semua yang kamu perlu — tanpa harus nanya admin terus.</p>
+    <ul class="check-list">
+      <li><span class="ck">✓</span> Progress per-bab live update dari mentor</li>
+      <li><span class="ck">✓</span> Download file deliverable kapan aja</li>
+      <li><span class="ck">✓</span> Timeline & estimasi sidang</li>
+      <li><span class="ck">✓</span> Chat langsung dengan admin & mentor</li>
+    </ul>
+  </div>
+</div>
+
+<div class="ftr">
+  © 2026 JokiBoy — Jasa Skripsi Terpercaya Se-Lampung
+</div>
+
+<script>
+  // ============ SUPABASE PLACEHOLDER ============
+  // Untuk integrasi nyata, isi nilai-nilai berikut dan uncomment Supabase loader:
+  const SUPABASE_URL = 'ISI_SUPABASE_URL';
+  const SUPABASE_ANON_KEY = 'ISI_ANON_KEY';
+
+  // Uncomment baris ini setelah isi config:
+  // const script = document.createElement('script');
+  // script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+  // document.head.appendChild(script);
+
+  // ============ LOGIN HANDLER ============
+  const form = document.getElementById('loginForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const msgError = document.getElementById('msgError');
+  const msgErrorText = document.getElementById('msgErrorText');
+  const msgSuccess = document.getElementById('msgSuccess');
+
+  function showError(text){
+    msgErrorText.textContent = text;
+    msgError.style.display = 'flex';
+    msgSuccess.style.display = 'none';
+  }
+  function showSuccess(){
+    msgSuccess.style.display = 'flex';
+    msgError.style.display = 'none';
+  }
+  function hideMsgs(){
+    msgError.style.display = 'none';
+    msgSuccess.style.display = 'none';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMsgs();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    if (!email || !password){
+      showError('Email dan password wajib diisi.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+      showError('Format email tidak valid.');
+      return;
+    }
+
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+
+    try {
+      // ============ SUPABASE AUTH (real implementation) ============
+      // Uncomment block ini setelah Supabase config diisi:
+      /*
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      showSuccess();
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+      */
+
+      // ============ DEMO MODE (hapus saat production) ============
+      await new Promise(r => setTimeout(r, 900));
+      // Demo: any password with min 6 chars is accepted
+      if (password.length < 6){
+        throw new Error('Password minimal 6 karakter (mode demo).');
+      }
+      showSuccess();
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+
+    } catch (err){
+      showError(err.message || 'Email atau password salah.');
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
