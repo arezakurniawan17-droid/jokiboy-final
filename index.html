@@ -721,6 +721,232 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
     .cd-box .u{font-size:9.5px;}
     .sticky-wa{right:14px; bottom:14px; padding:12px 18px; font-size:13.5px;}
   }
+
+  /* ==================== QUIZ WISUDA (lead magnet) ==================== */
+  :root{
+    --qz-moss:#8C9E5F;
+    --qz-moss-d:#6F8146;
+    --qz-cream:#FFF8EC;
+    --qz-orange:#E8894F;
+    --qz-orange-d:#D9743A;
+    --qz-green:#2E6B4E;
+    --qz-yellow:#FCE96A;
+    --qz-purple:#9B8CE0;
+    --qz-ink:#20351F;
+  }
+
+  /* --- Section teaser di landing --- */
+  .quiz-sec{padding:0 0 96px;}
+  .quiz-card{
+    position:relative; overflow:hidden;
+    background:linear-gradient(160deg,#93A566 0%,#7E9153 60%,#6F8146 100%);
+    border-radius:34px; padding:56px 56px;
+    display:grid; grid-template-columns:1.15fr .85fr; gap:40px; align-items:center;
+    box-shadow:0 26px 70px rgba(60,80,40,.28);
+  }
+  .quiz-card::after{
+    content:""; position:absolute; right:-90px; top:-90px;
+    width:320px; height:320px; border-radius:50%;
+    background:rgba(255,255,255,.08);
+  }
+  .quiz-card .qc-label{
+    display:inline-flex; align-items:center; gap:7px;
+    background:var(--qz-yellow); color:#33401b;
+    padding:7px 16px; border-radius:100px; font-size:13px; font-weight:800;
+    margin-bottom:18px;
+  }
+  .quiz-card h2{
+    font-size:clamp(28px,4vw,44px); line-height:1.14; letter-spacing:-1px;
+    color:#fff; font-weight:800; margin-bottom:14px;
+  }
+  .quiz-card h2 em{font-style:normal; color:var(--qz-yellow);}
+  .quiz-card p{color:rgba(255,255,255,.9); font-size:16px; max-width:520px; margin-bottom:26px;}
+  .quiz-card .qc-meta{
+    display:flex; gap:18px; flex-wrap:wrap; margin-top:18px;
+    color:rgba(255,255,255,.82); font-size:13.5px; font-weight:600;
+  }
+  .btn-quiz{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--qz-orange); color:#fff;
+    padding:18px 32px; border-radius:100px;
+    font-size:16.5px; font-weight:800;
+    box-shadow:0 12px 30px rgba(180,90,40,.4);
+    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .btn-quiz:hover{transform:translateY(-3px); background:var(--qz-orange-d); box-shadow:0 18px 40px rgba(180,90,40,.5);}
+
+  /* Mockup HP di kanan card */
+  .qc-phone{
+    position:relative; z-index:1;
+    background:var(--qz-cream); border-radius:30px;
+    border:8px solid #1d1d1f; box-shadow:0 20px 50px rgba(0,0,0,.3);
+    padding:20px 18px 22px; max-width:270px; margin-left:auto; width:100%;
+    transform:rotate(2.5deg);
+  }
+  .qc-phone .p-top{display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:#9a9a90; margin-bottom:12px;}
+  .qc-phone .p-bar{height:9px; border-radius:100px; background:#F3E2CE; overflow:hidden; margin-bottom:16px;}
+  .qc-phone .p-bar i{display:block; height:100%; width:62%; border-radius:100px; background:var(--qz-green);}
+  .qc-phone .p-q{font-size:15.5px; font-weight:800; color:var(--qz-ink); line-height:1.3; margin-bottom:14px;}
+  .qc-phone .p-opt{
+    background:var(--qz-orange); color:#fff; font-weight:800; font-size:13.5px;
+    padding:13px 16px; border-radius:16px; margin-bottom:9px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .qc-phone .p-opt.sel{background:var(--qz-green);}
+
+  /* --- Modal --- */
+  .qz-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(30,40,20,.55);
+    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .qz-overlay.open{opacity:1; pointer-events:auto;}
+  .qz-modal{
+    width:100%; max-width:480px; max-height:92vh; overflow-y:auto;
+    background:var(--qz-cream); border-radius:32px;
+    padding:26px 26px 30px;
+    box-shadow:0 30px 90px rgba(0,0,0,.4);
+    transform:scale(.94) translateY(14px); opacity:0;
+    transition:transform .3s cubic-bezier(.2,.8,.3,1), opacity .25s ease;
+  }
+  .qz-overlay.open .qz-modal{transform:scale(1) translateY(0); opacity:1;}
+  .qz-head{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+  .qz-back{
+    width:34px; height:34px; border-radius:50%; background:#F3E7D5; color:var(--qz-ink);
+    display:none; align-items:center; justify-content:center; font-size:17px; font-weight:800; flex:0 0 auto;
+  }
+  .qz-back.show{display:flex;}
+  .qz-title{flex:1; font-size:17px; font-weight:800; color:var(--qz-ink); letter-spacing:-.3px;}
+  .qz-close{
+    width:34px; height:34px; border-radius:50%; background:#F3E7D5; color:#6d6a5c;
+    display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:700; flex:0 0 auto;
+    transition:background .15s;
+  }
+  .qz-close:hover{background:#E9D9C2;}
+
+  .qz-progress{height:10px; border-radius:100px; background:#F3E2CE; overflow:hidden; margin-bottom:6px;}
+  .qz-progress i{display:block; height:100%; width:0; border-radius:100px; background:var(--qz-green); transition:width .35s cubic-bezier(.3,.9,.4,1);}
+  .qz-count{font-size:12.5px; font-weight:800; color:var(--qz-green); margin-bottom:20px;}
+  .qz-count span{color:#b9b0a0;}
+  .qz-progress-wrap{display:none;}
+  .qz-progress-wrap.show{display:block;}
+
+  .qz-stage{position:relative;}
+  .qz-step{display:none;}
+  .qz-step.active{display:block; animation:qzIn .28s ease both;}
+  .qz-step.out{animation:qzOut .18s ease both;}
+  @keyframes qzIn{from{opacity:0; transform:translateX(26px);} to{opacity:1; transform:translateX(0);}}
+  @keyframes qzOut{from{opacity:1; transform:translateX(0);} to{opacity:0; transform:translateX(-26px);}}
+
+  .qz-q{font-size:22px; font-weight:800; line-height:1.25; letter-spacing:-.5px; color:var(--qz-ink); margin-bottom:6px;}
+  .qz-hint{font-size:13.5px; color:#7c7666; margin-bottom:18px;}
+
+  .qz-opt{
+    width:100%; text-align:left;
+    background:var(--qz-orange); color:#fff;
+    padding:16px 18px; border-radius:18px; margin-bottom:11px;
+    font-size:15.5px; font-weight:800;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    box-shadow:0 4px 0 rgba(180,90,40,.45);
+    transition:transform .16s ease, background .16s ease, box-shadow .16s ease;
+  }
+  .qz-opt:hover{transform:translateY(-2px);}
+  .qz-opt:active{transform:translateY(2px); box-shadow:0 1px 0 rgba(180,90,40,.45);}
+  .qz-opt .ck{opacity:0; font-size:17px; transition:opacity .15s;}
+  .qz-opt.sel{background:var(--qz-green); box-shadow:0 4px 0 rgba(23,70,48,.5); transform:scale(1.02);}
+  .qz-opt.sel .ck{opacity:1;}
+
+  .qz-select, .qz-input{
+    width:100%; font-family:inherit; font-size:15px; font-weight:600; color:var(--qz-ink);
+    background:#fff; border:2px solid #EADCC6; border-radius:16px;
+    padding:14px 16px; margin-bottom:12px; outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .qz-select:focus, .qz-input:focus{border-color:var(--qz-green); box-shadow:0 0 0 4px rgba(46,107,78,.12);}
+  .qz-input.err{border-color:#d94a3d; box-shadow:0 0 0 4px rgba(217,74,61,.12);}
+  .qz-label{font-size:13px; font-weight:800; color:#6c6656; margin:2px 0 7px;}
+  .qz-errmsg{font-size:12.5px; font-weight:700; color:#d94a3d; margin:-6px 0 12px; display:none;}
+  .qz-errmsg.show{display:block;}
+
+  .qz-cta{
+    width:100%; background:var(--qz-green); color:#fff;
+    padding:17px 20px; border-radius:100px; font-size:16px; font-weight:800;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    box-shadow:0 10px 26px rgba(46,107,78,.32);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .qz-cta:hover{transform:translateY(-2px); box-shadow:0 16px 34px rgba(46,107,78,.42);}
+  .qz-cta.purple{background:var(--qz-purple); box-shadow:0 10px 26px rgba(155,140,224,.4);}
+  .qz-cta.wa{background:#22b357; box-shadow:0 10px 26px rgba(34,179,87,.35);}
+
+  /* Intro */
+  .qz-hero{
+    background:linear-gradient(160deg,#93A566,#6F8146); border-radius:24px;
+    padding:26px 22px; text-align:center; margin-bottom:20px; color:#fff;
+  }
+  .qz-hero .emo{font-size:46px; line-height:1; margin-bottom:10px;}
+  .qz-hero h3{font-size:24px; font-weight:800; letter-spacing:-.6px; line-height:1.2;}
+  .qz-hero p{font-size:14px; color:rgba(255,255,255,.9); margin-top:8px;}
+  .qz-bullets{list-style:none; margin-bottom:20px;}
+  .qz-bullets li{
+    display:flex; gap:10px; align-items:flex-start;
+    font-size:14.5px; font-weight:600; color:#4a4638; margin-bottom:10px;
+  }
+
+  /* Loading */
+  .qz-loading{text-align:center; padding:34px 6px;}
+  .qz-loading .big{
+    font-size:56px; font-weight:800; color:var(--qz-green); letter-spacing:-2px; line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .qz-loading .lbl{margin-top:14px; font-size:15px; font-weight:700; color:#7c7666; min-height:24px;}
+  .qz-dots{display:flex; gap:7px; justify-content:center; margin-top:20px;}
+  .qz-dots i{width:9px; height:9px; border-radius:50%; background:var(--qz-orange); animation:qzBounce 1s infinite;}
+  .qz-dots i:nth-child(2){animation-delay:.15s;}
+  .qz-dots i:nth-child(3){animation-delay:.3s;}
+  @keyframes qzBounce{0%,60%,100%{transform:translateY(0); opacity:.5;} 30%{transform:translateY(-9px); opacity:1;}}
+
+  /* Result */
+  .qz-result-hero{
+    background:linear-gradient(160deg,#93A566,#6F8146); border-radius:24px;
+    padding:28px 20px; text-align:center; color:#fff; margin-bottom:18px;
+  }
+  .qz-result-hero .cap{font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--qz-yellow);}
+  .qz-result-hero .num{
+    font-size:52px; font-weight:800; letter-spacing:-2px; line-height:1.05; margin:8px 0 4px;
+    font-variant-numeric:tabular-nums;
+    animation:qzPop .45s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes qzPop{from{transform:scale(.6); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .qz-result-hero .sub{font-size:13.5px; color:rgba(255,255,255,.88);}
+  .qz-box{
+    background:#fff; border:2px solid #EFE2CE; border-radius:18px;
+    padding:15px 17px; margin-bottom:11px;
+  }
+  .qz-box .t{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:#a09884; margin-bottom:5px;}
+  .qz-box .d{font-size:14.5px; font-weight:600; color:#3c3a30; line-height:1.5;}
+  .qz-box.warn{background:#FFF3E4; border-color:#F4D9B6;}
+  .qz-punch{
+    text-align:center; font-size:16px; font-weight:800; color:var(--qz-ink);
+    margin:16px 0 14px; line-height:1.4;
+  }
+  .qz-foot{text-align:center; font-size:12px; color:#9a9382; margin-top:12px;}
+
+  @media (max-width:900px){
+    .quiz-card{grid-template-columns:1fr; padding:40px 28px; border-radius:28px;}
+    .qc-phone{margin:0 auto; transform:none; max-width:290px;}
+  }
+  @media (max-width:600px){
+    .quiz-sec{padding:0 0 72px;}
+    .quiz-card{padding:32px 22px;}
+    .btn-quiz{width:100%; justify-content:center;}
+    .qz-overlay{padding:0;}
+    .qz-modal{max-width:none; max-height:100vh; height:100%; border-radius:0; padding:20px 20px 32px;}
+    .qz-q{font-size:20px;}
+  }
+
 </style>
 </head>
 <body>
@@ -814,6 +1040,33 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
       <div class="col rv"><div class="num">98<span class="acc">%</span></div><div class="lab">Lulus sidang skripsi</div></div>
       <div class="col rv"><div class="num">50<span class="acc">+</span></div><div class="lab">Kampus se-Indonesia 🇮🇩</div></div>
       <div class="col rv"><div class="num">20<span class="acc">+</span></div><div class="lab">Mentor Expert</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QUIZ PREDIKSI WISUDA ==================== -->
+<section class="quiz-sec section" id="prediksi" style="padding-top:0;">
+  <div class="container">
+    <div class="quiz-card rv">
+      <div>
+        <span class="qc-label">🎓 Gratis · 60 detik</span>
+        <h2>Kapan Gua Wisuda?<br/><em>Cek di sini →</em></h2>
+        <p>Jawab 5 pertanyaan singkat soal progress skripsi kamu, nanti kami hitung estimasi berapa lama lagi kamu bisa pake toga. Nggak ada jawaban yang salah, jujur aja.</p>
+        <button class="btn-quiz" onclick="qzOpen('section')">Cek Prediksi Wisuda Gua →</button>
+        <div class="qc-meta">
+          <span>✅ 5 pertanyaan</span>
+          <span>⏱️ ±60 detik</span>
+          <span>🔒 Data kamu aman</span>
+        </div>
+      </div>
+      <div class="qc-phone" aria-hidden="true">
+        <div class="p-top"><span>Prediksi Wisuda</span><span>4/5</span></div>
+        <div class="p-bar"><i></i></div>
+        <div class="p-q">Apa yang paling bikin skripsi kamu mandek?</div>
+        <div class="p-opt sel"><span>Susah ketemu dosbing</span><span>✓</span></div>
+        <div class="p-opt"><span>Bingung mulai dari mana</span><span></span></div>
+        <div class="p-opt"><span>Nggak ada waktu</span><span></span></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1256,6 +1509,498 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
   syncBarHeight();
   setInterval(updateCountdown, 1000);
   window.addEventListener('resize', syncBarHeight);
+</script>
+<!-- ==================== MODAL QUIZ ==================== -->
+<div class="qz-overlay" id="qzOverlay" role="dialog" aria-modal="true" aria-label="Prediksi Tanggal Wisuda">
+  <div class="qz-modal" id="qzModal">
+    <div class="qz-head">
+      <button class="qz-back" id="qzBack" aria-label="Kembali" onclick="qzPrev()">←</button>
+      <div class="qz-title">Prediksi Tanggal Wisuda Lo</div>
+      <button class="qz-close" aria-label="Tutup" onclick="qzClose()">✕</button>
+    </div>
+
+    <div class="qz-progress-wrap" id="qzProgWrap">
+      <div class="qz-progress"><i id="qzProgFill"></i></div>
+      <div class="qz-count"><b id="qzNow">1</b><span id="qzTotalTxt">/6</span></div>
+    </div>
+
+    <div class="qz-stage" id="qzStage">
+      <!-- INTRO -->
+      <div class="qz-step active" data-step="intro">
+        <div class="qz-hero">
+          <div class="emo">🎓</div>
+          <h3>Kapan gua wisuda?</h3>
+          <p>5 pertanyaan, 60 detik, langsung dapet estimasinya.</p>
+        </div>
+        <ul class="qz-bullets">
+          <li><span>✅</span><span>Estimasi waktu wisuda berdasarkan progress bab kamu</span></li>
+          <li><span>✅</span><span>Ketahuan hambatan utama yang bikin kamu mandek</span></li>
+          <li><span>✅</span><span>Langkah realistis biar target lulus kamu kekejar</span></li>
+        </ul>
+        <button class="qz-cta" onclick="qzStart()">Mulai Sekarang →</button>
+        <div class="qz-foot">Gratis. Nggak perlu daftar akun.</div>
+      </div>
+
+      <!-- Q1 -->
+      <div class="qz-step" data-step="q1">
+        <div class="qz-q">Sekarang kamu semester berapa, dan udah sampe bab mana?</div>
+        <div class="qz-hint">Jujur aja, ini cuma buat hitung estimasi.</div>
+        <div class="qz-label">Semester</div>
+        <select class="qz-select" id="qzSemester">
+          <option value="">Pilih semester kamu</option>
+        </select>
+        <div class="qz-label">Progress skripsi</div>
+        <div id="qzProgressOpts"></div>
+        <div class="qz-errmsg" id="qzErrQ1">Pilih semester dulu ya sebelum lanjut.</div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="qz-step" data-step="q2">
+        <div class="qz-q">Target lulus versi kamu sendiri kapan?</div>
+        <div class="qz-hint">Target di kepala kamu, bukan target kampus.</div>
+        <div id="qzTargetOpts"></div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="qz-step" data-step="q3">
+        <div class="qz-q">Kesibukan kamu di luar skripsi gimana?</div>
+        <div class="qz-hint">Makin sibuk, makin panjang estimasinya.</div>
+        <div id="qzSibukOpts"></div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="qz-step" data-step="q4">
+        <div class="qz-q">Jujur aja, apa yang paling bikin skripsi kamu mandek?</div>
+        <div class="qz-hint">Pilih yang paling kerasa sekarang.</div>
+        <div id="qzHambatOpts"></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="qz-step" data-step="q5">
+        <div class="qz-q">Siapa yang paling ngarepin kamu cepet lulus?</div>
+        <div class="qz-hint">Pertanyaan terakhir, janji.</div>
+        <div id="qzSupportOpts"></div>
+      </div>
+
+      <!-- GATE -->
+      <div class="qz-step" data-step="gate">
+        <div class="qz-q">Dikit lagi! Mau dikirim ke mana hasilnya?</div>
+        <div class="qz-hint">Kami simpan buat kirim hasil prediksi kamu. Nggak buat spam.</div>
+        <div class="qz-label">Nama lengkap</div>
+        <input class="qz-input" id="qzNama" type="text" placeholder="Nama kamu" autocomplete="name" />
+        <div class="qz-label">No. WhatsApp</div>
+        <input class="qz-input" id="qzWA" type="tel" inputmode="numeric" placeholder="08xxxxxxxxxx" autocomplete="tel" />
+        <div class="qz-label">Prodi / Jurusan</div>
+        <input class="qz-input" id="qzProdi" type="text" list="qzProdiList" placeholder="Contoh: Manajemen" />
+        <datalist id="qzProdiList">
+          <option value="Manajemen"></option><option value="Akuntansi"></option>
+          <option value="Ilmu Hukum"></option><option value="Teknik Informatika"></option>
+          <option value="Sistem Informasi"></option><option value="Psikologi"></option>
+          <option value="Keperawatan"></option><option value="Kebidanan"></option>
+          <option value="Pendidikan Guru SD (PGSD)"></option><option value="Pendidikan Bahasa Inggris"></option>
+          <option value="Ilmu Komunikasi"></option><option value="Administrasi Bisnis"></option>
+          <option value="Agribisnis"></option><option value="Teknik Sipil"></option>
+          <option value="Kesehatan Masyarakat"></option><option value="Ekonomi Pembangunan"></option>
+        </datalist>
+        <div class="qz-errmsg" id="qzErrGate">Cek lagi ya, ada isian yang belum bener.</div>
+        <button class="qz-cta purple" onclick="qzSubmitGate()">Lihat Prediksi Gua →</button>
+        <div class="qz-foot">🔒 Data kamu cuma dipakai buat follow-up konsultasi.</div>
+      </div>
+
+      <!-- LOADING -->
+      <div class="qz-step" data-step="loading">
+        <div class="qz-loading">
+          <div class="big" id="qzCalcNum">0</div>
+          <div class="lbl" id="qzCalcLbl">Menganalisis progress kamu...</div>
+          <div class="qz-dots"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="qz-step" data-step="result">
+        <div class="qz-result-hero">
+          <div class="cap">Estimasi wisuda kamu</div>
+          <div class="num" id="qzResNum">~0</div>
+          <div class="sub" id="qzResSub">kalau ritme kamu jalan kayak sekarang</div>
+        </div>
+        <div class="qz-box" id="qzResTargetBox">
+          <div class="t">Vs target kamu</div>
+          <div class="d" id="qzResTarget"></div>
+        </div>
+        <div class="qz-box warn">
+          <div class="t">Hambatan utama kamu</div>
+          <div class="d" id="qzResHambat"></div>
+        </div>
+        <div class="qz-punch">Kalau mulai serius dari sekarang, masih kekejar kok. 💪</div>
+        <button class="qz-cta wa" onclick="qzToWA()">💬 Konsultasi Gratis via WhatsApp</button>
+        <div class="qz-foot">Dijawab langsung sama tim JokiBoy, bukan bot.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  /* ==================== QUIZ PREDIKSI WISUDA ==================== */
+  const QZ_OPTS = {
+    progress: [
+      { v:'belum-mulai', t:'Belum mulai' },
+      { v:'bab-1', t:'Bab 1 selesai' },
+      { v:'bab-2', t:'Bab 2 selesai' },
+      { v:'bab-3', t:'Bab 3 selesai' },
+      { v:'bab-4', t:'Bab 4 selesai' },
+      { v:'bab-5', t:'Bab 5 selesai (tinggal sidang)' },
+    ],
+    target: [
+      { v:'semester-ini', t:'Semester ini', w:12 },
+      { v:'semester-depan', t:'Semester depan', w:24 },
+      { v:'tahun-depan', t:'Tahun depan', w:48 },
+      { v:'ga-mikirin', t:'Udah nggak mikirin target lagi', w:null },
+    ],
+    sibuk: [
+      { v:'fokus-skripsi', t:'Fokus skripsi doang' },
+      { v:'kerja-part-time', t:'Kerja part-time' },
+      { v:'kerja-full-time', t:'Kerja full-time' },
+      { v:'organisasi', t:'Organisasi / kegiatan lain' },
+    ],
+    hambatan: [
+      { v:'bingung-mulai', t:'Bingung mulai dari mana' },
+      { v:'susah-dosbing', t:'Susah ketemu dosen pembimbing' },
+      { v:'ga-ada-waktu', t:'Nggak ada waktu' },
+      { v:'malas', t:'Malas & susah mulai' },
+      { v:'data-susah', t:'Data susah diolah' },
+    ],
+    support: [
+      { v:'diri-sendiri', t:'Diri sendiri' },
+      { v:'orang-tua', t:'Orang tua' },
+      { v:'pasangan', t:'Pacar / keluarga lain' },
+      { v:'ga-ada', t:'Nggak ada yang tau' },
+    ],
+  };
+
+  const BASE_MINGGU     = { 'belum-mulai':20, 'bab-1':16, 'bab-2':12, 'bab-3':8, 'bab-4':4, 'bab-5':2 };
+  const MODIFIER_SIBUK  = { 'fokus-skripsi':1.0, 'kerja-part-time':1.2, 'kerja-full-time':1.5, 'organisasi':1.15 };
+  const MODIFIER_HAMBAT = { 'bingung-mulai':3, 'susah-dosbing':4, 'ga-ada-waktu':2, 'malas':2, 'data-susah':3 };
+
+  const QZ_INSIGHT = {
+    'bingung-mulai':'Bingung mulai dari mana. Ini paling sering bikin mahasiswa stuck berbulan-bulan — padahal begitu kerangkanya jelas, sisanya jalan sendiri.',
+    'susah-dosbing':'Susah ketemu dosen pembimbing. Ini yang paling bikin timeline molor, tapi juga paling cepat kelar kalau naskahmu udah rapi duluan pas bimbingan.',
+    'ga-ada-waktu':'Nggak ada waktu. Skripsi nggak butuh waktu banyak, tapi butuh waktu yang konsisten — dan itu yang paling susah kalau kamu ngerjain sendirian.',
+    'malas':'Malas & susah mulai. Bukan salah kamu — otak nolak kerjaan yang nggak jelas langkahnya. Begitu ada yang nemenin, biasanya langsung jalan.',
+    'data-susah':'Data susah diolah. Ini titik paling sering bikin mandek di Bab 4 — dan justru bagian yang paling cepat dibereskan kalau ada yang bantu.',
+  };
+
+  const QZ_STEPS = ['intro','q1','q2','q3','q4','q5','gate','loading','result'];
+  const qzState = { i:0, semester:'', progress:'', target:'', sibuk:'', hambatan:'', support:'', hasil:null, nama:'', wa:'', prodi:'', source:'', started:false };
+
+  const qzOverlay = document.getElementById('qzOverlay');
+  const qzStageEl = document.getElementById('qzStage');
+  const qzStepEls = () => qzStageEl.querySelectorAll('.qz-step');
+
+  function qzBuildOpts(containerId, list, key, autoAdvance){
+    const box = document.getElementById(containerId);
+    box.innerHTML = '';
+    list.forEach(o => {
+      const b = document.createElement('button');
+      b.className = 'qz-opt';
+      b.type = 'button';
+      b.innerHTML = `<span>${o.t}</span><span class="ck">✓</span>`;
+      b.addEventListener('click', () => {
+        box.querySelectorAll('.qz-opt').forEach(x => x.classList.remove('sel'));
+        b.classList.add('sel');
+        qzState[key] = o.v;
+        if (key === 'progress' && !document.getElementById('qzSemester').value){
+          document.getElementById('qzErrQ1').classList.add('show');
+          return;
+        }
+        document.getElementById('qzErrQ1')?.classList.remove('show');
+        setTimeout(() => { if (autoAdvance) qzNext(); }, 260);
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function qzInitQuiz(){
+    const sem = document.getElementById('qzSemester');
+    for (let i = 1; i <= 14; i++){
+      const o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = 'Semester ' + i + (i === 14 ? '+' : '');
+      sem.appendChild(o);
+    }
+    sem.addEventListener('change', () => {
+      qzState.semester = sem.value;
+      if (sem.value) document.getElementById('qzErrQ1').classList.remove('show');
+    });
+    qzBuildOpts('qzProgressOpts', QZ_OPTS.progress, 'progress', true);
+    qzBuildOpts('qzTargetOpts',   QZ_OPTS.target,   'target',   true);
+    qzBuildOpts('qzSibukOpts',    QZ_OPTS.sibuk,    'sibuk',    true);
+    qzBuildOpts('qzHambatOpts',   QZ_OPTS.hambatan, 'hambatan', true);
+    qzBuildOpts('qzSupportOpts',  QZ_OPTS.support,  'support',  true);
+  }
+
+  function qzGoto(index){
+    const els = qzStepEls();
+    const cur = qzStageEl.querySelector('.qz-step.active');
+    const next = qzStageEl.querySelector(`.qz-step[data-step="${QZ_STEPS[index]}"]`);
+    if (cur === next) return;
+    if (cur){ cur.classList.remove('active'); }
+    qzState.i = index;
+    next.classList.add('active');
+    qzSyncChrome();
+    document.getElementById('qzModal').scrollTop = 0;
+  }
+
+  function qzSyncChrome(){
+    const step = QZ_STEPS[qzState.i];
+    const qIndex = QZ_STEPS.indexOf(step) - 1; // q1 = 0 ... gate = 5
+    const wrap = document.getElementById('qzProgWrap');
+    const isQuiz = qIndex >= 0 && qIndex <= 5;
+    wrap.classList.toggle('show', isQuiz);
+    if (isQuiz){
+      document.getElementById('qzProgFill').style.width = ((qIndex + 1) / 6 * 100) + '%';
+      document.getElementById('qzNow').textContent = qIndex + 1;
+      document.getElementById('qzTotalTxt').textContent = '/6';
+    }
+    document.getElementById('qzBack').classList.toggle('show', qIndex > 0 && qIndex <= 5);
+  }
+
+  function qzNext(){
+    if (QZ_STEPS[qzState.i] === 'q1' && !qzState.semester){
+      document.getElementById('qzErrQ1').classList.add('show');
+      return;
+    }
+    qzGoto(qzState.i + 1);
+  }
+  function qzPrev(){ if (qzState.i > 1) qzGoto(qzState.i - 1); }
+  function qzStart(){ qzGoto(QZ_STEPS.indexOf('q1')); }
+
+  function qzOpen(source){
+    qzState.source = source || 'unknown';
+    qzOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (!qzState.started){
+      qzState.started = true;
+      if (window.fbq) fbq('trackCustom', 'QuizStarted', { source: source || 'unknown' });
+    }
+  }
+  function qzClose(){
+    qzOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    try { sessionStorage.setItem('jb_quiz_dismissed', '1'); } catch(e){}
+    try { localStorage.setItem('jb_quiz_dismissed', '1'); } catch(e){}
+  }
+  qzOverlay.addEventListener('click', e => { if (e.target === qzOverlay) qzClose(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && qzOverlay.classList.contains('open')) qzClose(); });
+
+  /* ---------- Logic ---------- */
+  function hitungPrediksi(progressBab, kesibukan, hambatan){
+    const totalMinggu = (BASE_MINGGU[progressBab] * MODIFIER_SIBUK[kesibukan]) + MODIFIER_HAMBAT[hambatan];
+    const totalHari = Math.round(totalMinggu * 7);
+    let label;
+    if (totalMinggu < 8){
+      label = `~${totalHari} hari lagi`;
+    } else {
+      const bulan = Math.round(totalMinggu / 4.33 * 2) / 2;
+      label = `~${String(bulan).replace('.', ',')} bulan lagi`;
+    }
+    return { totalMinggu, totalHari, label };
+  }
+
+  function qzValidWA(v){ return /^(08|628)[0-9]{8,12}$/.test(v.replace(/[^0-9]/g, '')); }
+  function qzNormalWA(v){
+    let n = v.replace(/[^0-9]/g, '');
+    if (n.startsWith('08')) n = '62' + n.slice(1);
+    return n;
+  }
+
+  function qzSubmitGate(){
+    const nama  = document.getElementById('qzNama');
+    const wa    = document.getElementById('qzWA');
+    const prodi = document.getElementById('qzProdi');
+    const err   = document.getElementById('qzErrGate');
+    let ok = true;
+    [nama, wa, prodi].forEach(el => el.classList.remove('err'));
+    if (nama.value.trim().length < 2){ nama.classList.add('err'); ok = false; }
+    if (!qzValidWA(wa.value)){ wa.classList.add('err'); ok = false; }
+    if (prodi.value.trim().length < 2){ prodi.classList.add('err'); ok = false; }
+    err.classList.toggle('show', !ok);
+    if (!ok) return;
+
+    qzState.nama  = nama.value.trim();
+    qzState.wa    = qzNormalWA(wa.value);
+    qzState.prodi = prodi.value.trim();
+    if (window.fbq) fbq('trackCustom', 'QuizCompleted');
+    qzSimpanLead();
+    qzRunLoading();
+  }
+
+  /* ---------- Simpan lead ke Supabase (growth.jokiboy.com) ----------
+     Nulis ke tabel `leads` yang sama dengan Growth Dashboard, jadi lead quiz
+     langsung masuk pipeline CRM (status 'baru' → tinggal di-follow up tim).
+     Anon key ini memang publik; RLS yang jaga — anon cuma boleh INSERT baris
+     berbentuk lead quiz, nggak bisa baca satu baris pun.
+     Skema: growth-dashboard/scripts/migration_quiz_leads.sql */
+  const SUPABASE_URL      = 'https://uyfqbfjynqntingqibcu.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5ZnFiZmp5bnFudGluZ3FpYmN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NDEwMTUsImV4cCI6MjA5NjQxNzAxNX0.FHygQHNAUjUJAK-MvePqh44NSzw7f_FovV7NRJyvpkY';
+
+  function qzLabel(list, val){ return (QZ_OPTS[list].find(x => x.v === val) || {}).t || null; }
+
+  function qzPersona(){
+    if (qzState.support === 'orang-tua') return 'ditagih_ortu';
+    if (qzState.sibuk === 'kerja-full-time' || qzState.sibuk === 'kerja-part-time') return 'kerja_sambil_kuliah';
+    if (parseInt(qzState.semester, 10) >= 13) return 'hampir_do';
+    return 'lainnya';
+  }
+
+  // Seberapa mepet prediksi dibanding target user sendiri
+  function qzVerdict(totalMinggu){
+    const tgt = QZ_OPTS.target.find(t => t.v === qzState.target);
+    if (!tgt || tgt.w === null) return 'kritis';       // udah nggak punya target = paling butuh dibantu
+    const gap = totalMinggu - tgt.w;
+    if (gap <= 0) return 'aman';
+    if (gap <= 8) return 'mepet';
+    return 'kritis';
+  }
+
+  async function qzSimpanLead(){
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+    const hasil = hitungPrediksi(qzState.progress, qzState.sibuk, qzState.hambatan);
+    const babLabel = qzLabel('progress', qzState.progress);
+
+    const payload = {
+      tanggal_masuk: new Date().toISOString().slice(0, 10),
+      brand: 'jb_skripsi',
+      nama: qzState.nama,
+      whatsapp: qzState.wa,
+      semester: parseInt(qzState.semester, 10) || null,
+      bab_terakhir_acc: babLabel,
+      source: 'website',
+      source_detail: 'quiz-prediksi-wisuda:' + (qzState.source || 'unknown'),
+      persona: qzPersona(),
+      verdict: qzVerdict(hasil.totalMinggu),
+      status: 'baru',
+      prodi: qzState.prodi,
+      quiz_prediksi: hasil.label,
+      quiz_hambatan: qzLabel('hambatan', qzState.hambatan),
+      quiz_target: qzLabel('target', qzState.target),
+      quiz_kesibukan: qzLabel('sibuk', qzState.sibuk),
+      quiz_minggu: Math.round(hasil.totalMinggu * 10) / 10,
+      catatan:
+        `[Quiz Prediksi Wisuda] Estimasi ${hasil.label}. ` +
+        `Prodi ${qzState.prodi}, ${babLabel}. ` +
+        `Target: ${qzLabel('target', qzState.target)}. ` +
+        `Kesibukan: ${qzLabel('sibuk', qzState.sibuk)}. ` +
+        `Hambatan: ${qzLabel('hambatan', qzState.hambatan)}. ` +
+        `Yang ngarepin lulus: ${qzLabel('support', qzState.support)}.`,
+    };
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) console.warn('[quiz] gagal simpan lead:', res.status, await res.text());
+    } catch(e){
+      console.warn('[quiz] gagal simpan lead:', e);
+    }
+  }
+
+  function qzRunLoading(){
+    qzGoto(QZ_STEPS.indexOf('loading'));
+    const hasil = hitungPrediksi(qzState.progress, qzState.sibuk, qzState.hambatan);
+    qzState.hasil = hasil;
+    const numEl = document.getElementById('qzCalcNum');
+    const lblEl = document.getElementById('qzCalcLbl');
+    const teks = ['Menganalisis progress kamu...', 'Ngitung beban kesibukan...', 'Menghitung estimasi...'];
+    let ti = 0;
+    lblEl.textContent = teks[0];
+    const tInt = setInterval(() => { ti = (ti + 1) % teks.length; lblEl.textContent = teks[ti]; }, 550);
+    const nInt = setInterval(() => { numEl.textContent = Math.floor(Math.random() * 180) + 10; }, 60);
+    setTimeout(() => {
+      clearInterval(tInt); clearInterval(nInt);
+      qzShowResult(hasil);
+    }, 1900);
+  }
+
+  function qzCountUp(el, to, suffix, dur){
+    const start = performance.now();
+    const desimal = to % 1 !== 0;
+    function frame(now){
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = to * eased;
+      el.textContent = '~' + (desimal ? (Math.round(val * 2) / 2).toFixed(1).replace('.', ',') : Math.round(val)) + suffix;
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function qzShowResult(hasil){
+    qzGoto(QZ_STEPS.indexOf('result'));
+    const numEl = document.getElementById('qzResNum');
+    if (hasil.totalMinggu < 8){
+      qzCountUp(numEl, hasil.totalHari, ' hari lagi', 900);
+    } else {
+      qzCountUp(numEl, Math.round(hasil.totalMinggu / 4.33 * 2) / 2, ' bulan lagi', 900);
+    }
+    document.getElementById('qzResSub').textContent =
+      `Halo ${qzState.nama.split(' ')[0]}, ini estimasi kalau ritme kamu jalan kayak sekarang.`;
+
+    const tgt = QZ_OPTS.target.find(t => t.v === qzState.target);
+    const tBox = document.getElementById('qzResTargetBox');
+    const tEl  = document.getElementById('qzResTarget');
+    if (!tgt){
+      tBox.style.display = 'none';
+    } else if (tgt.w === null){
+      tEl.textContent = 'Kamu sempet berhenti berharap. Tapi angka di atas nunjukin: masih ada jalan.';
+    } else if (hasil.totalMinggu <= tgt.w){
+      tEl.textContent = `Target kamu: ${tgt.t}. Ini sesuai jalur — tinggal jaga ritme.`;
+    } else {
+      const selisihMinggu = Math.round(hasil.totalMinggu - tgt.w);
+      const selisih = selisihMinggu >= 8
+        ? `${(Math.round(selisihMinggu / 4.33 * 2) / 2).toString().replace('.', ',')} bulan`
+        : `${selisihMinggu} minggu`;
+      tEl.textContent = `Target kamu: ${tgt.t}. Ada gap sekitar ${selisih} dari target kamu sendiri.`;
+    }
+
+    document.getElementById('qzResHambat').textContent = QZ_INSIGHT[qzState.hambatan] || '';
+  }
+
+  function qzToWA(){
+    const hambat = (QZ_OPTS.hambatan.find(h => h.v === qzState.hambatan) || {}).t || '-';
+    const msg = `Halo JokiBoy! Nama saya ${qzState.nama} (${qzState.prodi}, semester ${qzState.semester}). ` +
+      `Tadi saya isi Prediksi Wisuda dan hasilnya ${qzState.hasil.label}, kendala utama saya: ${hambat}. ` +
+      `Boleh dibantu konsultasi?`;
+    if (window.fbq) fbq('trackCustom', 'QuizWAClick');
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  }
+
+  /* ---------- Trigger popup: scroll 50% / exit-intent ---------- */
+  function qzDismissed(){
+    try { if (sessionStorage.getItem('jb_quiz_dismissed')) return true; } catch(e){}
+    try { if (localStorage.getItem('jb_quiz_dismissed')) return true; } catch(e){}
+    return false;
+  }
+  let qzPopupDone = false;
+  function qzTryPopup(source){
+    if (qzPopupDone || qzDismissed() || qzOverlay.classList.contains('open')) return;
+    qzPopupDone = true;
+    qzOpen(source);
+  }
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY + window.innerHeight;
+    if (scrolled / document.documentElement.scrollHeight > 0.5) qzTryPopup('scroll-50');
+  }, { passive:true });
+  document.addEventListener('mouseout', e => {
+    if (!e.relatedTarget && e.clientY <= 0 && window.matchMedia('(min-width:900px)').matches) qzTryPopup('exit-intent');
+  });
+
+  qzInitQuiz();
 </script>
 </body>
 </html>
