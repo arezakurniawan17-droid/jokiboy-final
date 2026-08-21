@@ -1456,14 +1456,25 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
 
 <script>
   // ==================== CONFIG ====================
-  const TOTAL_SLOTS = 20;
-  const USED_SLOTS  = 13; // update tiap ada order
+  const TOTAL_SLOTS      = 20;
+  const SLOT_PER_MINGGU  = 5;    // slot yang kepakai tiap minggu
+  const SISA_MINIMAL     = 2;    // jangan pernah nyentuh 0, biar orang tetap bisa order
+  const SLOT_MANUAL      = null; // isi angka (mis. 6) kalau mau override manual
   const WA_NUMBER   = '6282178880633';
 
   // ==================== SLOT COUNTER ====================
+  // Sisa slot menipis otomatis tiap minggu dan reset lagi tiap awal bulan:
+  // minggu 1 sisa 15, minggu 2 sisa 10, minggu 3 sisa 5, minggu 4 ke atas sisa 2.
+  function sisaSlot(){
+    if (SLOT_MANUAL !== null) return SLOT_MANUAL;
+    const mingguKe = Math.ceil(new Date().getDate() / 7);           // 1..5
+    const terpakai = Math.min(SLOT_PER_MINGGU * mingguKe, TOTAL_SLOTS - SISA_MINIMAL);
+    return TOTAL_SLOTS - terpakai;
+  }
+
   function updateSlots(){
-    const remaining = TOTAL_SLOTS - USED_SLOTS;
-    const pct = Math.round((USED_SLOTS / TOTAL_SLOTS) * 100);
+    const remaining = sisaSlot();
+    const pct = Math.round(((TOTAL_SLOTS - remaining) / TOTAL_SLOTS) * 100);
     document.getElementById('slotBadge').textContent = remaining;
     document.getElementById('slotBig').textContent = remaining;
     document.getElementById('progressFill').style.width = pct + '%';
