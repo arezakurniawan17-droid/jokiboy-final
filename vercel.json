@@ -1,8 +1,9 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/login", "destination": "/login.html" }
+  "redirects": [
+    { "source": "/login", "destination": "https://client.jokiboy.com/auth/login", "permanent": false },
+    { "source": "/login.html", "destination": "https://client.jokiboy.com/auth/login", "permanent": false }
   ],
   "headers": [
     {
