@@ -735,6 +735,7 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
 
   /* --- Section teaser di landing --- */
   .quiz-sec{padding:96px 0;}
+  .quiz-sec-bawah{padding-bottom:0;}
   .quiz-card{
     position:relative; overflow:hidden;
     background:linear-gradient(135deg,#1140ff 0%,var(--qz-blue) 42%,#0120a8 100%);
@@ -1375,6 +1376,34 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
 </section>
 
 <!-- ==================== SLOT SECTION ==================== -->
+<!-- ==================== QUIZ PREDIKSI WISUDA (bawah) ==================== -->
+<section class="quiz-sec section quiz-sec-bawah">
+  <div class="container">
+    <div class="quiz-card rv">
+      <div class="qc-copy">
+        <span class="qc-label">🎓 Gratis · 60 detik</span>
+        <h2>Masih mikir-mikir?<br/><em>Cek dulu prediksinya →</em></h2>
+        <p>Nggak usah langsung mutusin. Jawab 5 pertanyaan dulu, lihat estimasi kamu wisuda kapan. Kalau ternyata masih aman, ya syukur. Kalau ternyata mepet, baru mikir langkah berikutnya.</p>
+        <button class="btn-quiz" onclick="qzOpen('section-bawah')">Cek Prediksi Wisuda Gua →</button>
+        <div class="qc-meta">
+          <span>✅ 5 pertanyaan</span>
+          <span>⏱️ ±60 detik</span>
+          <span>🔒 Data kamu aman</span>
+        </div>
+      </div>
+      <div class="qc-phone" aria-hidden="true">
+        <div class="p-top"><span>Prediksi Wisuda</span><span>5/5</span></div>
+        <div class="p-bar"><i style="width:100%"></i></div>
+        <div class="p-q">Siapa yang paling ngarepin kamu cepet lulus?</div>
+        <div class="p-opt sel"><span>Orang tua</span><span>✓</span></div>
+        <div class="p-opt"><span>Diri sendiri</span><span></span></div>
+        <div class="p-opt"><span>Pacar / keluarga lain</span><span></span></div>
+        <div class="p-opt"><span>Nggak ada yang tau</span><span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="slot" id="slot">
   <div class="container">
     <div class="slot-grid">
@@ -1805,8 +1834,12 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
   function qzClose(){
     qzOverlay.classList.remove('open');
     document.body.style.overflow = '';
+    // Ditutup = jangan ganggu lagi di sesi ini. Kalau sudah submit, tahan 30 hari
+    // biar orang yang sama nggak dipopup-in terus tiap balik ke web.
     try { sessionStorage.setItem('jb_quiz_dismissed', '1'); } catch(e){}
-    try { localStorage.setItem('jb_quiz_dismissed', '1'); } catch(e){}
+    if (qzState.nama){
+      try { localStorage.setItem('jb_quiz_done_until', String(Date.now() + 30*24*60*60*1000)); } catch(e){}
+    }
   }
   qzOverlay.addEventListener('click', e => { if (e.target === qzOverlay) qzClose(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && qzOverlay.classList.contains('open')) qzClose(); });
@@ -2002,8 +2035,17 @@ src="https://www.facebook.com/tr?id=1676540339954812&ev=PageView&noscript=1"
 
   /* ---------- Trigger popup: scroll 50% / exit-intent ---------- */
   function qzDismissed(){
+    // Buat ngetes: buka jokiboy.com/?resetquiz biar penanda lama dibuang
+    if (location.search.includes('resetquiz')){
+      try { sessionStorage.removeItem('jb_quiz_dismissed'); } catch(e){}
+      try { localStorage.removeItem('jb_quiz_dismissed'); localStorage.removeItem('jb_quiz_done_until'); } catch(e){}
+      return false;
+    }
     try { if (sessionStorage.getItem('jb_quiz_dismissed')) return true; } catch(e){}
-    try { if (localStorage.getItem('jb_quiz_dismissed')) return true; } catch(e){}
+    try {
+      const until = parseInt(localStorage.getItem('jb_quiz_done_until') || '0', 10);
+      if (until && Date.now() < until) return true;
+    } catch(e){}
     return false;
   }
   let qzPopupDone = false;
